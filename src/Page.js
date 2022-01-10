@@ -1,20 +1,23 @@
 import axios from "axios";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 
 export default function Page(props) {
   const { data } = props;
-  var str = data.comments.replace(/'/g, '"');
-  str = JSON.parse(str);
-  const [comments, setComments] = useState(str.all);
+  const [comments, setComments] = useState([]);
+  useEffect(() => {
+    axios.get(`/posts/${data.id}/`).then((res) => {
+      setComments(res.data);
+      console.log(res.data);
+    });
+  }, [data.id]);
   const comment = useRef("");
   const onSubmit = async () => {
-    const putComment = await axios.put("/posts/comments/", {
+    const postData = {
       idx: data.id,
       comment: comment.current.value,
-    });
-    var str = putComment.data.comments.replace(/'/g, '"');
-    str = JSON.parse(str);
-    setComments([...str.all]);
+    };
+    const postComment = await axios.post(`/posts/comments/`, postData);
+    setComments([...comments, postComment.data]);
   };
   return (
     <div>
@@ -25,7 +28,7 @@ export default function Page(props) {
         Submit
       </button>
       {comments.map((com) => {
-        return <div>{com}</div>;
+        return <div>{com.comment}</div>;
       })}
     </div>
   );

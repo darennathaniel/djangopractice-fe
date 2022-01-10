@@ -33,25 +33,25 @@ function Home(props) {
       <h1>Posts</h1>
       {datas.map((da) => {
         return (
-          <div
-            className="post"
-            onClick={() => {
-              navigate(`${da.id}`);
-            }}
-          >
-            <div>
-              Title: {da.title}{" "}
-              <button
-                type="button"
-                onClick={() => {
-                  onDelete(da.id);
-                }}
-              >
-                Delete
-              </button>
+          <>
+            <div
+              className="post"
+              onClick={() => {
+                navigate(`${da.id}`);
+              }}
+            >
+              <div>Title: {da.title} </div>
+              <div>Isi: {da.body}</div>
             </div>
-            <div>Isi: {da.body}</div>
-          </div>
+            <button
+              type="button"
+              onClick={() => {
+                onDelete(da.id);
+              }}
+            >
+              Delete
+            </button>
+          </>
         );
       })}
     </div>
